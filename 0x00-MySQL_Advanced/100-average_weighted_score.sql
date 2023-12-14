@@ -1,26 +1,18 @@
--- A script to have tables named 'users' and 'scores'
+-- Create the ComputeAverageWeightedScoreForUser procedure
 
-DELIMITER //
-
-CREATE PROCEDURE ComputeAverageWeightedScoreForUser(IN user_id INT)
+delimiter //
+CREATE PROCEDURE ComputeAverageWeightedScoreForUser (
+		IN user_id INT
+)
 BEGIN
-    DECLARE total_score DECIMAL(10, 2);
-    DECLARE total_weight INT;
-
-    -- Calculate total_score and total_weight for the user
-    SELECT SUM(score * weight), SUM(weight)
-    INTO total_score, total_weight
-    FROM scores
-    WHERE user_id = user_id;
-
-    -- Ensure total_weight is not zero to avoid division by zero
-    IF total_weight > 0 THEN
-        -- Calculate the average weighted score and store it
-        UPDATE users
-        SET average_weighted_score = total_score / total_weight
-        WHERE id = user_id;
-    END IF;
-END //
-
-DELIMITER ;
+	UPDATE users
+	SET average_score = (
+		SELECT SUM(corrections.score * projects.weight) / SUM(projects.weight)
+		FROM corrections
+		JOIN projects
+		ON projects.id = corrections.project_id AND corrections.user_id = user_id
+	)
+	WHERE id = user_id;
+END//
+delimiter ;
 
