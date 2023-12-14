@@ -1,6 +1,5 @@
--- Assuming you have tables named 'users' and 'scores'
+-- A script to have tables named 'users' and 'scores'
 
--- Create the stored procedure
 DELIMITER //
 
 CREATE PROCEDURE ComputeAverageWeightedScoreForUser(IN user_id INT)
