@@ -1,5 +1,3 @@
--- Assuming you have already imported the metal_bands table
-
 -- Rank countries by the number of fans
 SELECT
     origin,
